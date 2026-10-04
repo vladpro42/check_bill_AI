@@ -3,7 +3,46 @@ import { config } from 'dotenv'
 import { Telegraf } from "telegraf"
 import fs from "fs/promises"
 import path from "path"
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { users } from "./src/db/schema.js"
 config()
+
+
+const db = drizzle(process.env.DATABASE_URL);
+const result = await db.execute('select * from users');
+const res = await db.execute('select 1');
+console.log(result.rows)
+
+// async function main() {
+//     const user = {
+//         name: 'John',
+//         age: 30,
+//         email: 'john@example.com',
+//     };
+//     await db.insert(users).values(user);
+//     console.log('New user created!')
+//     const users = await db.select().from(users);
+//     console.log('Getting all users from the database: ', users)
+//     /*
+//     const users: {
+//       id: number;
+//       name: string;
+//       age: number;
+//       email: string;
+//     }[]
+//     */
+//     await db
+//         .update(users)
+//         .set({
+//             age: 31,
+//         })
+//         .where(eq(users.email, user.email));
+//     console.log('User info updated!')
+//     await db.delete(users).where(eq(users.email, user.email));
+//     console.log('User deleted!')
+// }
+// main();
+
 
 if (!process.env.TG_BOT_TOKEN) {
     throw new Error('Отсутствую uniqueId for TgBot')
